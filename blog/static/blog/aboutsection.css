@@ -1,0 +1,193 @@
+/* Modern Uber-inspired About page styles */
+
+.about-section {
+  padding: 50px 20px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.about-section h1 {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.profile-img-container {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 5px solid #fff;
+}
+
+.title {
+  color: #666;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.about-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.skills-section {
+  margin: 30px 0;
+}
+
+.skill-item {
+  padding: 15px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.skill-item:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-5px);
+}
+
+.skill-item i {
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.social-links {
+  margin-top: 30px;
+}
+
+.social-icon {
+  display: inline-block;
+  margin: 0 15px;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: translateY(-5px);
+}
+
+.social-icon-disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.social-icon-disabled:hover {
+  transform: none;
+}
+
+.social-icon i {
+  transition: color 0.3s ease;
+}
+
+.social-icon:hover i.fa-twitter {
+  color: #1DA1F2;
+}
+
+.social-icon:hover i.fa-linkedin {
+  color: #0077B5;
+}
+
+.social-icon:hover i.fa-github {
+  color: #333;
+}
+
+.social-icon:hover i.fa-instagram {
+  color: #E1306C;
+}
+
+.contact-btn {
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.contact-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .about-section {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .card {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+[data-theme="dark"] .card-body {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .profile-img {
+  border: 5px solid #444;
+}
+
+[data-theme="dark"] h2,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .title {
+  color: #bbb;
+}
+
+[data-theme="dark"] .about-description {
+  color: #d0d0d0;
+}
+
+[data-theme="dark"] .skill-item {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .skill-item:hover {
+  background-color: #3a3a3a;
+}
+
+[data-theme="dark"] .skill-item i {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .social-icon {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .contact-btn {
+  background-color: #444;
+  color: #e0e0e0;
+  border-color: #666;
+}
+
+[data-theme="dark"] .contact-btn:hover {
+  background-color: #555;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .skill-item {
+    margin-bottom: 20px;
+  }
+  
+  .social-icon {
+    margin: 0 10px;
+  }
+}

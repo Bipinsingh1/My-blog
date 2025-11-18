@@ -1,0 +1,112 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'blog/aboutsection.css' %}">
+<div class="container mt-5 mb-5">
+    <div class="about-section mb-5">
+        <h1>About Me</h1>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="profile-img-container mx-auto mb-3">
+                            {% if profile.image %}
+                                <img src="{{ profile.image.url }}" class="rounded-circle profile-img" alt="Profile Picture">
+                            {% else %}
+                                <img src="{% static 'blog/images/default.jpg' %}" class="rounded-circle profile-img" alt="Profile Picture">
+                            {% endif %}
+                        </div>
+                        <h2 class="mt-3">{% if user %}{{ user.get_full_name|default:user.username }}{% else %}Your Name{% endif %}</h2>
+                        <p class="title">Web Developer</p>
+                        <p class="about-description">
+                            {% if profile.bio %}
+                                {{ profile.bio }}
+                            {% else %}
+                                I'm passionate about creating user-friendly web experiences and sharing knowledge through writing.
+                                With years of experience in web development, I enjoy discussing the latest trends and technologies.
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <h4 class="text-center mb-3">Skills</h4>
+                    <div class="row text-center skills-section mb-4">
+                        <div class="col-md-4">
+                            <div class="skill-item">
+                                <i class="fas fa-code fa-2x mb-2"></i>
+                                <h5>Web Development</h5>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="skill-item">
+                                <i class="fas fa-paint-brush fa-2x mb-2"></i>
+                                <h5>UI/UX Design</h5>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="skill-item">
+                                <i class="fas fa-database fa-2x mb-2"></i>
+                                <h5>Database Management</h5>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center social-links">
+                        <h4 class="mb-3">Connect with me</h4>
+                        <div class="d-flex justify-content-center">
+                            {% if social_links.twitter %}
+                                <a href="{{ social_links.twitter }}" target="_blank" class="social-icon" title="Twitter">
+                                    <i class="fab fa-twitter fa-2x"></i>
+                                </a>
+                            {% else %}
+                                <a href="#" class="social-icon social-icon-disabled" title="Twitter (Coming Soon)">
+                                    <i class="fab fa-twitter fa-2x"></i>
+                                </a>
+                            {% endif %}
+                            
+                            {% if social_links.linkedin %}
+                                <a href="{{ social_links.linkedin }}" target="_blank" class="social-icon" title="LinkedIn">
+                                    <i class="fab fa-linkedin fa-2x"></i>
+                                </a>
+                            {% else %}
+                                <a href="#" class="social-icon social-icon-disabled" title="LinkedIn (Coming Soon)">
+                                    <i class="fab fa-linkedin fa-2x"></i>
+                                </a>
+                            {% endif %}
+                            
+                            {% if social_links.github %}
+                                <a href="{{ social_links.github }}" target="_blank" class="social-icon" title="GitHub">
+                                    <i class="fab fa-github fa-2x"></i>
+                                </a>
+                            {% else %}
+                                <a href="#" class="social-icon social-icon-disabled" title="GitHub (Coming Soon)">
+                                    <i class="fab fa-github fa-2x"></i>
+                                </a>
+                            {% endif %}
+                            
+                            {% if social_links.instagram %}
+                                <a href="{{ social_links.instagram }}" target="_blank" class="social-icon" title="Instagram">
+                                    <i class="fab fa-instagram fa-2x"></i>
+                                </a>
+                            {% else %}
+                                <a href="#" class="social-icon social-icon-disabled" title="Instagram (Coming Soon)">
+                                    <i class="fab fa-instagram fa-2x"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="mailto:{% if user %}{{ user.email }}{% else %}your.email@example.com{% endif %}" class="btn btn-dark contact-btn">
+                            <i class="fas fa-envelope mr-2"></i> Contact Me
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
