@@ -110,4 +110,4 @@ The license for this project is not specified. Please add a license file (e.g., 
 ## Acknowledgments
 
 *   Django: The web framework used to build this application.
-*   [Other libraries/resources used in the project - list them here]
+
