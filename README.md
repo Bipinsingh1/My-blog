@@ -1,22 +1,39 @@
-My Blog — Django Full-Stack Blog Platform
+# My Blog — Django Full-Stack Blog Platform
+
 A multi-user blog platform built with Django, PostgreSQL, and Bootstrap 4. Users can register, write rich-text posts with images, browse by category, and leave comments.
 
-Features
+---
 
-User authentication — Register, log in, log out, and manage your profile with a custom avatar (auto-resized to 300×300px)
-Rich text editor — Posts are written using TinyMCE with full formatting toolbar (bold, italic, links, images, code blocks, tables)
-Post management — Create, edit, and delete your own posts; permission-protected so users can only modify their own content
-Category filtering — Posts are tagged with categories; readers can browse all posts under a specific category
-Comments — Readers can comment on posts; uses redirect-after-POST to prevent duplicate submissions
-Pagination — Post lists paginate at 5 posts per page
-User post pages — Each author has a dedicated page listing all their posts
-About page — Displays the site admin's profile dynamically
+## Features
 
+- **User authentication** — Register, log in, log out, and manage your profile with a custom avatar (auto-resized to 300×300px)
+- **Rich text editor** — Posts are written using TinyMCE with full formatting toolbar (bold, italic, links, images, code blocks, tables)
+- **Post management** — Create, edit, and delete your own posts; permission-protected so users can only modify their own content
+- **Category filtering** — Posts are tagged with categories; readers can browse all posts under a specific category
+- **Comments** — Readers can comment on posts; uses redirect-after-POST to prevent duplicate submissions
+- **Pagination** — Post lists paginate at 5 posts per page
+- **User post pages** — Each author has a dedicated page listing all their posts
+- **About page** — Displays the site admin's profile dynamically
 
-Tech Stack
-LayerTechnologyBackendPython 3, Django 3.1DatabasePostgreSQLFrontendBootstrap 4, crispy-formsRich TextTinyMCEImage handlingPillowEmailSMTP via GmailDeploymentReplit
+---
 
-Project Structure
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | Python 3, Django 3.1 |
+| Database | PostgreSQL |
+| Frontend | Bootstrap 4, crispy-forms |
+| Rich Text | TinyMCE |
+| Image handling | Pillow |
+| Email | SMTP via Gmail |
+| Deployment | Replit |
+
+---
+
+## Project Structure
+
+```
 My-blog/
 ├── blink/                  # Django project config (settings, urls, wsgi)
 ├── blog/
@@ -43,25 +60,44 @@ My-blog/
 │   ├── views.py                # Register, login, logout, profile update
 │   └── forms/                  # UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 └── media/                      # Uploaded post images and profile pictures
+```
 
-Setup & Installation
-Prerequisites
+---
 
-Python 3.8+
-PostgreSQL
-pip
+## Setup & Installation
 
-1. Clone the repository
-bashgit clone https://github.com/Bipinsingh1/My-blog.git
+### Prerequisites
+
+- Python 3.8+
+- PostgreSQL
+- pip
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Bipinsingh1/My-blog.git
 cd My-blog
-2. Create and activate a virtual environment
-bashpython -m venv venv
+```
+
+### 2. Create and activate a virtual environment
+
+```bash
+python -m venv venv
 source venv/bin/activate        # macOS/Linux
 venv\Scripts\activate           # Windows
-3. Install dependencies
-bashpip install -r requirements.txt
-4. Set environment variables
-Create a .env file in the root directory (never commit this):
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Set environment variables
+
+Create a `.env` file in the root directory (never commit this):
+
+```
 PGDATABASE=your_db_name
 PGUSER=your_db_user
 PGPASSWORD=your_db_password
@@ -69,36 +105,67 @@ PGHOST=localhost
 PGPORT=5432
 EMAIL_USER=your_gmail@gmail.com
 EMAIL_PASS=your_app_password
+```
 
-Note: For Gmail, use an App Password, not your regular password.
+> **Note:** For Gmail, use an [App Password](https://support.google.com/accounts/answer/185833), not your regular password.
 
-5. Apply migrations
-bashpython manage.py migrate
-6. Create a superuser (admin)
-bashpython manage.py createsuperuser
-7. Run the development server
-bashpython manage.py runserver
-Visit http://127.0.0.1:8000 in your browser.
+### 5. Apply migrations
 
-Key Implementation Details
-Django signals for profile images
-When a user saves their profile, a post_save signal automatically opens the uploaded image with Pillow and resizes it to 300×300px if it exceeds that size — keeping storage usage low without any manual step.
-python@receiver(post_save, sender=User)
+```bash
+python manage.py migrate
+```
+
+### 6. Create a superuser (admin)
+
+```bash
+python manage.py createsuperuser
+```
+
+### 7. Run the development server
+
+```bash
+python manage.py runserver
+```
+
+Visit `http://127.0.0.1:8000` in your browser.
+
+---
+
+## Key Implementation Details
+
+**Django signals for profile images**
+When a user saves their profile, a `post_save` signal automatically opens the uploaded image with Pillow and resizes it to 300×300px if it exceeds that size — keeping storage usage low without any manual step.
+
+```python
+@receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-Permission-protected views
-Post editing and deletion use LoginRequiredMixin and UserPassesTestMixin to ensure only the post's author can modify it:
-pythondef test_func(self):
+```
+
+**Permission-protected views**
+Post editing and deletion use `LoginRequiredMixin` and `UserPassesTestMixin` to ensure only the post's author can modify it:
+
+```python
+def test_func(self):
     post = self.get_object()
     return self.request.user == post.author
-Dynamic category dropdown
-The post creation form queries the Category model at form initialisation time (not import time) to ensure the dropdown always reflects the current database state:
-pythondef __init__(self, *args, **kwargs):
+```
+
+**Dynamic category dropdown**
+The post creation form queries the `Category` model at form initialisation time (not import time) to ensure the dropdown always reflects the current database state:
+
+```python
+def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     self.fields['category'].widget.choices = get_categories()
+```
 
-Database Schema (simplified)
+---
+
+## Database Schema (simplified)
+
+```
 User (Django built-in)
  └── Profile          (OneToOne → User)
 
@@ -113,11 +180,16 @@ Comment
 
 Category
  └── name             (CharField)
+```
 
-Screenshots
+---
 
-Add screenshots here once the app is running.
+## Screenshots
 
+> Add screenshots here once the app is running.
 
-License
+---
+
+## License
+
 MIT
