@@ -1,113 +1,123 @@
-# My-blog
+My Blog — Django Full-Stack Blog Platform
+A multi-user blog platform built with Django, PostgreSQL, and Bootstrap 4. Users can register, write rich-text posts with images, browse by category, and leave comments.
 
-## Project Overview
+Features
 
-This project appears to be a Django-based web application, potentially a blog. While a detailed description was not provided, the project structure suggests a standard Django setup.  This README provides a basic outline for setting up and running the application.
+User authentication — Register, log in, log out, and manage your profile with a custom avatar (auto-resized to 300×300px)
+Rich text editor — Posts are written using TinyMCE with full formatting toolbar (bold, italic, links, images, code blocks, tables)
+Post management — Create, edit, and delete your own posts; permission-protected so users can only modify their own content
+Category filtering — Posts are tagged with categories; readers can browse all posts under a specific category
+Comments — Readers can comment on posts; uses redirect-after-POST to prevent duplicate submissions
+Pagination — Post lists paginate at 5 posts per page
+User post pages — Each author has a dedicated page listing all their posts
+About page — Displays the site admin's profile dynamically
 
-## Key Features & Benefits
 
-*   Potentially allows users to create and manage blog posts.
-*   Utilizes the Django framework for rapid development and a robust backend.
-*   Likely includes user authentication and content management features (details depend on the implementation).
+Tech Stack
+LayerTechnologyBackendPython 3, Django 3.1DatabasePostgreSQLFrontendBootstrap 4, crispy-formsRich TextTinyMCEImage handlingPillowEmailSMTP via GmailDeploymentReplit
 
-## Prerequisites & Dependencies
+Project Structure
+My-blog/
+├── blink/                  # Django project config (settings, urls, wsgi)
+├── blog/
+│   ├── models/
+│   │   ├── post.py         # Post model with TinyMCE HTMLField, image, category, author
+│   │   ├── comment.py      # Comment model linked to Post via ForeignKey
+│   │   └── category.py     # Category model
+│   ├── views/              # One controller per feature
+│   │   ├── post_list_controller.py
+│   │   ├── post_detail_controller.py
+│   │   ├── post_create_controller.py
+│   │   ├── post_update_controller.py
+│   │   ├── post_delete_controller.py
+│   │   ├── post_comment_controller.py
+│   │   ├── user_post_list_controller.py
+│   │   ├── category_controller.py
+│   │   └── about_controller.py
+│   └── forms/
+│       ├── PostForm.py         # Create form with dynamic category dropdown
+│       ├── PostUpdateForm.py   # Update form
+│       └── CommentForm.py      # Comment form
+├── users/
+│   ├── models/profile.py       # Profile model with auto-resize via Django signals
+│   ├── views.py                # Register, login, logout, profile update
+│   └── forms/                  # UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+└── media/                      # Uploaded post images and profile pictures
 
-Before you begin, ensure you have the following installed:
+Setup & Installation
+Prerequisites
 
-*   **Python:** Version 3.6 or higher.
-*   **pip:** Python package installer.
-*   **Virtualenv (optional but recommended):** For creating isolated Python environments.
+Python 3.8+
+PostgreSQL
+pip
 
-This project relies on the following Python packages, as indicated in the original `README.md` requirements section:
+1. Clone the repository
+bashgit clone https://github.com/Bipinsingh1/My-blog.git
+cd My-blog
+2. Create and activate a virtual environment
+bashpython -m venv venv
+source venv/bin/activate        # macOS/Linux
+venv\Scripts\activate           # Windows
+3. Install dependencies
+bashpip install -r requirements.txt
+4. Set environment variables
+Create a .env file in the root directory (never commit this):
+PGDATABASE=your_db_name
+PGUSER=your_db_user
+PGPASSWORD=your_db_password
+PGHOST=localhost
+PGPORT=5432
+EMAIL_USER=your_gmail@gmail.com
+EMAIL_PASS=your_app_password
 
-```
-certifi==2018.10.15
-chardet==3.0.4
-Django==2.1
-django-crispy-forms==1.7.2
-idna==2.7
-Pillow==5.2.0
-pytz==2018.5
-requests==2.19.1
-urllib3==1.23
-```
+Note: For Gmail, use an App Password, not your regular password.
 
-It is *strongly recommended* to upgrade Django to a supported version as Django 2.1 is severely outdated.  This older version may contain security vulnerabilities.
+5. Apply migrations
+bashpython manage.py migrate
+6. Create a superuser (admin)
+bashpython manage.py createsuperuser
+7. Run the development server
+bashpython manage.py runserver
+Visit http://127.0.0.1:8000 in your browser.
 
-## Installation & Setup Instructions
+Key Implementation Details
+Django signals for profile images
+When a user saves their profile, a post_save signal automatically opens the uploaded image with Pillow and resizes it to 300×300px if it exceeds that size — keeping storage usage low without any manual step.
+python@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+Permission-protected views
+Post editing and deletion use LoginRequiredMixin and UserPassesTestMixin to ensure only the post's author can modify it:
+pythondef test_func(self):
+    post = self.get_object()
+    return self.request.user == post.author
+Dynamic category dropdown
+The post creation form queries the Category model at form initialisation time (not import time) to ensure the dropdown always reflects the current database state:
+pythondef __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    self.fields['category'].widget.choices = get_categories()
 
-1.  **Create a Virtual Environment (Recommended):**
+Database Schema (simplified)
+User (Django built-in)
+ └── Profile          (OneToOne → User)
 
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # On Linux/macOS
-    venv\Scripts\activate  # On Windows
-    ```
+Post
+ ├── author           (ForeignKey → User)
+ ├── category         (CharField)
+ ├── content          (TinyMCE HTMLField)
+ └── image            (ImageField)
 
-2.  **Install Dependencies:**
+Comment
+ └── post             (ForeignKey → Post)
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+Category
+ └── name             (CharField)
 
-    *Important:* You'll need to create a `requirements.txt` file in the root directory of your project containing the listed dependencies.  You can generate a `requirements.txt` using `pip freeze > requirements.txt` if you have the listed dependencies installed already.  It's highly recommended to upgrade Django to a supported version.  Example:
+Screenshots
 
-    ```
-    Django>=3.2,<5.0  # Example upgrade. Choose a supported version.
-    certifi==2018.10.15
-    chardet==3.0.4
-    django-crispy-forms==1.7.2
-    idna==2.7
-    Pillow==5.2.0
-    pytz==2018.5
-    requests==2.19.1
-    urllib3==1.23
-    ```
+Add screenshots here once the app is running.
 
-3.  **Migrate the Database:**
 
-    ```bash
-    python manage.py migrate
-    ```
-
-4.  **Create a Superuser (Admin User):**
-
-    ```bash
-    python manage.py createsuperuser
-    ```
-    Follow the prompts to set a username and password for the admin user.
-
-5.  **Run the Development Server:**
-
-    ```bash
-    python manage.py runserver
-    ```
-
-    This will start the Django development server, usually at `http://127.0.0.1:8000/`.
-
-## Usage Examples & API Documentation
-
-Since there is no description of specific usage examples or APIs, refer to the Django documentation for guidance on creating views, models, and templates for a blog application. You'll need to implement the blog's functionality based on your requirements. Access the Django admin interface at `http://127.0.0.1:8000/admin/` to manage users, posts, and other data.
-
-## Configuration Options
-
-*   **`blink/settings.py`:** This file contains the main configuration settings for your Django project, including database settings, secret key, debug mode, and more. Review and adjust these settings according to your needs.
-*   **Environment Variables:** Consider using environment variables for sensitive information like the database password or secret key.  Django can be configured to read these values from the environment.
-
-## Contributing Guidelines
-
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix.
-3.  Implement your changes and write tests.
-4.  Submit a pull request.
-
-Please ensure your code follows the project's coding style and includes adequate tests.
-
-## License Information
-
-The license for this project is not specified. Please add a license file (e.g., `LICENSE.txt` or `LICENSE`) to the repository to clarify the terms of use.  Common open-source licenses include MIT, Apache 2.0, and GPL.
-
-## Acknowledgments
-
-*   Django: The web framework used to build this application.
-
+License
+MIT
